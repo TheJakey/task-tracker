@@ -2,6 +2,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { UiService } from 'src/app/services/ui.service';
 import { Task } from 'src/app/Task';
+import { TaskItemComponent } from '../task-item/task-item.component';
 
 @Component({
   selector: 'app-add-task',
@@ -9,7 +10,8 @@ import { Task } from 'src/app/Task';
   styleUrls: ['./add-task.component.css'],
 })
 export class AddTaskComponent implements OnInit {
-  @Output() onAddTask: EventEmitter<Task> = new EventEmitter();
+  @Output() onSaveTask: EventEmitter<Task> = new EventEmitter();
+  private task: Task | null = null;
   text!: string;
   day!: string;
   reminder: boolean = false;
@@ -17,12 +19,25 @@ export class AddTaskComponent implements OnInit {
   subscription: Subscription;
 
   constructor(private uiService: UiService) {
-    this.subscription = uiService
-      .onToggle()
-      .subscribe((newShowAddTask) => (this.showAddTask = newShowAddTask));
+    this.subscription = uiService.onToggle().subscribe((newShowAddTask) => {
+      this.showAddTask = newShowAddTask;
+      if (!this.showAddTask) {
+        this.clearFields();
+      }
+    });
   }
 
   ngOnInit(): void {}
+
+  setTask(task: Task) {
+    this.task = task;
+
+    if (task != null) {
+      this.text = task.text;
+      this.day = task.day;
+      this.reminder = task.reminder;
+    }
+  }
 
   onSubmit() {
     if (!this.text) {
@@ -30,16 +45,37 @@ export class AddTaskComponent implements OnInit {
       return;
     }
 
-    const newTask = {
-      text: this.text,
-      day: this.day,
-      reminder: this.reminder,
-    };
+    if (this.task == null) {
+      this.createNewTask();
+    } else {
+      this.updateTask(this.task);
+    }
+  }
 
-    this.onAddTask.emit(newTask);
+  createNewTask() {
+    const newTask = this.updateTaskFromInputs(<Task>{});
 
+    this.onSaveTask.emit(newTask);
+
+    this.clearFields();
+  }
+
+  updateTask(task: Task) {
+    this.onSaveTask.emit(this.updateTaskFromInputs(task));
+  }
+
+  private clearFields() {
+    this.task = null;
     this.text = '';
     this.day = '';
     this.reminder = false;
+  }
+  
+  updateTaskFromInputs(task: Task) {
+    task.text = this.text;
+    task.day = this.day;
+    task.reminder = this.reminder;
+
+    return task;
   }
 }

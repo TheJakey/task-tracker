@@ -14,3 +14,9 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.task-icons {
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: 10px;
+}
