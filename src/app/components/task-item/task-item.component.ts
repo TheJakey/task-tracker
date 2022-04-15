@@ -2,6 +2,9 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Task } from 'src/app/Task';
 import { faTimes, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { TaskService } from 'src/app/services/task.service';
+import { MatDialog } from '@angular/material/dialog';
+import { PopUpComponent } from '../pop-up/pop-up.component';
+
 
 @Component({
   selector: 'app-task-item',
@@ -16,7 +19,7 @@ export class TaskItemComponent implements OnInit {
   faTimes = faTimes
   faPenToSquare = faPenToSquare
   
-  constructor(private taskService:TaskService) { }
+  constructor(private taskService:TaskService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
   }
@@ -26,7 +29,14 @@ export class TaskItemComponent implements OnInit {
   }
 
   onDelete(task: Task) {
-    this.onDeleteTask.emit(task);
+    const dialogRef = this.dialog.open(PopUpComponent);
+    dialogRef.componentInstance.onActionConfirmed.subscribe((userChoice) => {
+      dialogRef.close();
+
+      if (userChoice) {
+        this.onDeleteTask.emit(task);
+      }
+    });
   }
 
   onToggle(task: Task) {

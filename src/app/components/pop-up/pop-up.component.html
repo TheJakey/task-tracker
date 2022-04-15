@@ -1,0 +1,7 @@
+<div>
+  <p>Are you sure you want to delete this task?</p>
+  <div class="buttons-center">
+    <app-button (btnClick)="confirmAction()" [text]="'Yes, Delete'" [color]="'red'"></app-button>
+    <app-button (btnClick)="cancelAction()" [text]="'No, go back'" [color]="'black'"></app-button>
+  </div>
+</div>
