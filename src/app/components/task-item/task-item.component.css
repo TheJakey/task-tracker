@@ -1,8 +1,13 @@
 .task {
   background: #f4f4f4;
-  margin: 5px;
+  margin: 5px 5px 7px 5px;
   padding: 10px 20px;
   cursor: pointer;
+}
+
+.task:hover {
+  background: #e3e3e3;
+  box-shadow: 0 2px 8px 1px #aaaaaa;
 }
 
 .task.reminder {
