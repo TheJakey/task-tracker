@@ -13,7 +13,7 @@ export class AddTaskComponent implements OnInit {
   @Output() onSaveTask: EventEmitter<Task> = new EventEmitter();
   private task: Task | null = null;
   text!: string;
-  day!: string;
+  day!: Date | null;
   reminder: boolean = false;
   showAddTask!: boolean;
   subscription: Subscription;
@@ -67,7 +67,7 @@ export class AddTaskComponent implements OnInit {
   private clearFields() {
     this.task = null;
     this.text = '';
-    this.day = '';
+    this.day = null;
     this.reminder = false;
   }
   

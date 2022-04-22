@@ -3,10 +3,7 @@
     <label for="text">Task</label>
     <input type="text" name="text" [(ngModel)]="text" id="text" placeholder="Add Task" />
   </div>
-  <div class="form-control">
-    <label for="day">Day and Time</label>
-    <input type="text" name="day" [(ngModel)]="day" id="day" placeholder="Specify day and time" />
-  </div>
+  <app-date-picker [(pickedDate)]="day"></app-date-picker>
   <div class="form-control form-control-check">
     <label for="reminder">Set Reminder</label>
     <input type="checkbox" name="reminder" [(ngModel)]="reminder" id="reminder" />
