@@ -1,9 +1,12 @@
 <app-add-task (onSaveTask)="saveTask($event)"></app-add-task>
-<app-task-item
-  *ngFor="let task of tasks"
-  [task]="task"
-  (onEditTask)="toggleEditTask(task)"
-  (onDeleteTask)="deleteTask(task)"
-  (onToggleReminder)="toggleReminder(task)"
-></app-task-item>
+<div cdkDropList [cdkDropListData]="tasks" (cdkDropListDropped)="drop($event)" class="list">
+  <div cdkDrag *ngFor="let task of tasks" class="box">
+    <app-task-item
+      [task]="task"
+      (onEditTask)="toggleEditTask(task)"
+      (onDeleteTask)="deleteTask(task)"
+      (onToggleReminder)="toggleReminder(task)"
+    ></app-task-item>
+  </div>
+</div>
 <app-footer></app-footer>

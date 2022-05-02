@@ -22,6 +22,7 @@ import { AboutComponent } from './components/about/about.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { PopUpComponent } from './components/pop-up/pop-up.component';
 import { DatePickerComponent } from './components/date-picker/date-picker.component';
+import { DragDropModule } from '@angular/cdk/drag-drop'
 
 const appRoutes: Routes = [
   {path: '', component: TasksComponent},
@@ -53,7 +54,8 @@ const appRoutes: Routes = [
     MatNativeDateModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    MatInputModule
+    MatInputModule,
+    DragDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]
