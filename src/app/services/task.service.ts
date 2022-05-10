@@ -21,6 +21,10 @@ export class TaskService {
     return this.httpClient.get<Task[]>(this.apiUrl);
   }
 
+  getTasksNgrx(): Observable<Array<Task>> {
+    return this.httpClient.get<Array<Task>>(this.apiUrl);
+  } 
+
   addTask(task: Task): Observable<Task> {
     return this.httpClient.post<Task>(this.apiUrl, task, httpOptions);
   }

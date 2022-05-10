@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { UiService } from 'src/app/services/ui.service';
 import { Task } from 'src/app/Task';
-import { TaskItemComponent } from '../task-item/task-item.component';
 
 @Component({
   selector: 'app-add-task',
@@ -10,7 +10,7 @@ import { TaskItemComponent } from '../task-item/task-item.component';
   styleUrls: ['./add-task.component.css'],
 })
 export class AddTaskComponent implements OnInit {
-  @Output() onSaveTask: EventEmitter<Task> = new EventEmitter();
+  @Output() onSaveTask: EventEmitter<Task> = new EventEmitter<Task>();
   private task: Task | null = null;
   text!: string;
   day!: Date | null;
@@ -18,7 +18,7 @@ export class AddTaskComponent implements OnInit {
   showAddTask!: boolean;
   subscription: Subscription;
 
-  constructor(private uiService: UiService) {
+  constructor(private uiService: UiService, private store: Store) {
     this.subscription = uiService.onToggle().subscribe((newShowAddTask) => {
       this.showAddTask = newShowAddTask;
       if (!this.showAddTask) {
@@ -48,7 +48,7 @@ export class AddTaskComponent implements OnInit {
     if (this.task == null) {
       this.createNewTask();
     } else {
-      this.updateTask(this.task);
+      this.onSaveTask.emit(this.updateTaskFromInputs(JSON.parse(JSON.stringify(this.task))));
     }
   }
 
@@ -60,10 +60,6 @@ export class AddTaskComponent implements OnInit {
     this.clearFields();
   }
 
-  updateTask(task: Task) {
-    this.onSaveTask.emit(this.updateTaskFromInputs(task));
-  }
-
   private clearFields() {
     this.task = null;
     this.text = '';
@@ -71,7 +67,7 @@ export class AddTaskComponent implements OnInit {
     this.reminder = false;
   }
   
-  updateTaskFromInputs(task: Task) {
+  updateTaskFromInputs(task: Task): Task {
     task.text = this.text;
     task.day = this.day;
     task.reminder = this.reminder;

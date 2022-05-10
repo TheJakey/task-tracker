@@ -1,6 +1,11 @@
 <app-add-task (onSaveTask)="saveTask($event)"></app-add-task>
-<div cdkDropList [cdkDropListData]="tasks" (cdkDropListDropped)="drop($event)" class="list">
-  <div cdkDrag *ngFor="let task of tasks" class="box">
+<div cdkDropList [cdkDropListData]="tasks$" (cdkDropListDropped)="drop($event)" class="list">
+  <div
+    cdkDrag
+    *ngFor="let task of tasks$ | async; index as i"
+    class="box"
+    [style.order]="task.order"
+  >
     <app-task-item
       [task]="task"
       (onEditTask)="toggleEditTask(task)"

@@ -23,6 +23,8 @@ import { FooterComponent } from './components/footer/footer.component';
 import { PopUpComponent } from './components/pop-up/pop-up.component';
 import { DatePickerComponent } from './components/date-picker/date-picker.component';
 import { DragDropModule } from '@angular/cdk/drag-drop'
+import { StoreModule } from '@ngrx/store';
+import { tasksReducer } from './state/tasks.reducer';
 
 const appRoutes: Routes = [
   {path: '', component: TasksComponent},
@@ -55,7 +57,8 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     ReactiveFormsModule,
     MatInputModule,
-    DragDropModule
+    DragDropModule,
+    StoreModule.forRoot({ tasks: tasksReducer })
   ],
   providers: [],
   bootstrap: [AppComponent]
