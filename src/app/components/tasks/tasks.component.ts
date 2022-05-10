@@ -6,7 +6,7 @@ import {
 import { Task } from 'src/app/Task';
 import { TaskService } from 'src/app/services/task.service';
 import { UiService } from 'src/app/services/ui.service';
-import { Observable } from 'rxjs';
+import { filter, Observable } from 'rxjs';
 import { AddTaskComponent } from '../add-task/add-task.component';
 import {
   CdkDragDrop,
@@ -31,7 +31,7 @@ export class TasksComponent implements OnInit {
   @ViewChild(AddTaskComponent)
   private addTaskComponent!: AddTaskComponent;
 
-  tasks$: Observable<readonly Task[]> = this.store.select(selectTasks);
+  tasks: ReadonlyArray<Task> = [];
 
   constructor(
     private taskService: TaskService,
@@ -43,21 +43,19 @@ export class TasksComponent implements OnInit {
     this.taskService
       .getTasksNgrx()
       .subscribe((tasks) => this.store.dispatch(retrievedTaskList({ tasks })));
+    
+    this.store.select(selectTasks).subscribe(selected_tasks => this.tasks = selected_tasks);
   }
 
-  saveTask(task_readonly: Task): void {
-    let task: Task = JSON.parse(JSON.stringify(task_readonly));
+  saveTask(taskReadOnly: Task): void {
+    let task: Task = JSON.parse(JSON.stringify(taskReadOnly));
 
     if (task.id != null) {
       this.store.dispatch(updateTask(task));
 
       this.taskService.updateTask(task).subscribe();
     } else {
-      // hmm this is weird
-      let last_order: number = -1;
-      this.tasks$.subscribe((tasks) => {
-        last_order = Math.max(...tasks.map((task) => task.order)) + 1;
-      });
+      let last_order: number = Math.max(...this.tasks.map((task) => task.order)) + 1;
       task.order = last_order !== undefined ? last_order : 0;
 
       this.store.dispatch(addTask({ task }));
@@ -86,40 +84,37 @@ export class TasksComponent implements OnInit {
     this.taskService.updateTask(task).subscribe();
   }
 
-  drop(event: CdkDragDrop<Observable<ReadonlyArray<Task>>>) {
-    console.log('Before');
-    console.log(event);
-
-    event.container.data.subscribe((tasks_obs) => {
-      let tasks: Task[] = [...tasks_obs];
-
-      if (event.previousContainer === event.container) {
-        moveItemInArray(tasks, event.previousIndex, event.currentIndex);
-      } else {
-        event.previousContainer.data.subscribe((previousTasks_obs) => {
-          let previousTasks: Task[] = [...previousTasks_obs];
-          transferArrayItem(
-            [...previousTasks],
-            tasks,
-            event.previousIndex,
-            event.currentIndex
-          );
-          //if transfer, recalculate the order of previous (the list from drag)
-          previousTasks.forEach((x, index) => {
-            x.order = index;
-          });
-        });
-      }
-      //always, recalculate the order of the container (the list to drag)
-      let reordered_tasks: Array<Task> = [];
-      tasks.forEach((read_only_task, index) => {
-        let task: Task = JSON.parse(JSON.stringify(read_only_task));
-        task.order = index;
-
-        reordered_tasks.push(task);
+  drop(event: CdkDragDrop<ReadonlyArray<Task>>) {
+    let data = [...event.container.data];
+    let previousData = [...event.container.data];
+    
+    if (event.previousContainer === event.container) {
+      moveItemInArray(
+        data,
+        event.previousIndex,
+        event.currentIndex
+      );
+    } else {
+      transferArrayItem(
+        previousData,
+        data,
+        event.previousIndex,
+        event.currentIndex
+      );
+      //if transfer, recalculate the order of previous (the list from drag)
+      event.previousContainer.data.forEach((x, index) => {
+        x.order = index;
       });
-
-      this.taskService.updateAllTasks(reordered_tasks);
+    }
+    //always, recalculate the order of the container (the list to drag)
+    data = data.map((readOnlyTask, index) => {
+      let task = JSON.parse(JSON.stringify(readOnlyTask));
+      task.order = index;
+      return task;
     });
+
+    this.taskService.updateAllTasks(data);
+
+    this.store.dispatch(retrievedTaskList({tasks: data}));
   }
 }
