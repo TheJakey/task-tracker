@@ -6,7 +6,6 @@ import {
 import { Task } from 'src/app/Task';
 import { TaskService } from 'src/app/services/task.service';
 import { UiService } from 'src/app/services/ui.service';
-import { filter, Observable } from 'rxjs';
 import { AddTaskComponent } from '../add-task/add-task.component';
 import {
   CdkDragDrop,
@@ -48,7 +47,7 @@ export class TasksComponent implements OnInit {
   }
 
   saveTask(taskReadOnly: Task): void {
-    let task: Task = JSON.parse(JSON.stringify(taskReadOnly));
+    let task: Task = {...taskReadOnly};
 
     if (task.id != null) {
       this.store.dispatch(updateTask(task));
@@ -77,7 +76,7 @@ export class TasksComponent implements OnInit {
   }
 
   toggleReminder(task: Task): void {
-    task = JSON.parse(JSON.stringify(task));
+    task = {...task}
     task.reminder = !task.reminder;
     
     this.store.dispatch(updateTask(task));
@@ -108,7 +107,7 @@ export class TasksComponent implements OnInit {
     }
     //always, recalculate the order of the container (the list to drag)
     data = data.map((readOnlyTask, index) => {
-      let task = JSON.parse(JSON.stringify(readOnlyTask));
+      let task = {...readOnlyTask};
       task.order = index;
       return task;
     });

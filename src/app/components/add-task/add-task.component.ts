@@ -48,7 +48,7 @@ export class AddTaskComponent implements OnInit {
     if (this.task == null) {
       this.createNewTask();
     } else {
-      this.onSaveTask.emit(this.updateTaskFromInputs(JSON.parse(JSON.stringify(this.task))));
+      this.onSaveTask.emit(this.updateTaskFromInputs({...this.task}));
     }
   }
 
