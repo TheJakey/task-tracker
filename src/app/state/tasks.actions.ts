@@ -11,12 +11,26 @@ export const updateTask = createAction(
     props<Task>()
 )
 
+export const updateTaskList = createAction(
+    '[Task List/API] Update Tasks',
+    props<{ tasks: Array<Task> }>()
+)
+
+export const updateTaskListSuccess = createAction(
+    '[Task List/API] Update Tasks Success',
+    props<{ tasks: Array<Task> }>()
+)
+
 export const deleteTask = createAction(
     '[Task List] Delete Task',
     props<Task>()
 )
 
-export const retrievedTaskList = createAction(
+export const retrieveTaskList = createAction(
+    '[Task List/API] Retrieve Tasks'
+);
+
+export const retrieveTaskListSuccess = createAction(
     '[Task List/API] Retrieve Tasks Success',
     props<{ tasks: ReadonlyArray<Task>}>()
 );

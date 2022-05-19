@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Task } from '../Task';
-import { delay, Observable, timer } from 'rxjs';
+import { delay, Observable, of, timer } from 'rxjs';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -39,7 +39,7 @@ export class TaskService {
     return this.httpClient.put<Task>(url, task, httpOptions);
   }
 
-  updateAllTasks(tasks: Task[]): void {
+  updateAllTasks(tasks: Task[]): Observable<Task[]> {
     // json-server used as BE currently doesn't support BULK update, so had to come up with a workaround
     const url = `${this.apiUrl}/`;
 
@@ -50,5 +50,7 @@ export class TaskService {
         this.httpClient.put<Task>(url + task.id, task, httpOptions).subscribe();
       }, task.order * 200);
     }
+
+    return of(tasks);
   }
 }

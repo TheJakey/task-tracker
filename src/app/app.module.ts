@@ -25,6 +25,8 @@ import { DatePickerComponent } from './components/date-picker/date-picker.compon
 import { DragDropModule } from '@angular/cdk/drag-drop'
 import { StoreModule } from '@ngrx/store';
 import { tasksReducer } from './state/tasks.reducer';
+import {EffectsModule} from "@ngrx/effects";
+import {TasksEffects} from "./state/tasks.effects";
 
 const appRoutes: Routes = [
   {path: '', component: TasksComponent},
@@ -52,13 +54,15 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes, { enableTracing: true }),
     MatDialogModule,
     MatFormFieldModule,
-    MatDatepickerModule, 
+    MatDatepickerModule,
     MatNativeDateModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
     MatInputModule,
     DragDropModule,
-    StoreModule.forRoot({ tasks: tasksReducer })
+    StoreModule.forRoot({ tasks: tasksReducer }),
+    EffectsModule.forRoot([TasksEffects]),
+    EffectsModule.forFeature([TasksEffects])
   ],
   providers: [],
   bootstrap: [AppComponent]

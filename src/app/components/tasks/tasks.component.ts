@@ -16,8 +16,9 @@ import { Store } from '@ngrx/store';
 import {
   addTask,
   deleteTask,
-  retrievedTaskList,
+  retrieveTaskList,
   updateTask,
+  updateTaskList,
 } from 'src/app/state/tasks.actions';
 import { selectTasks } from 'src/app/state/tasks.selectors';
 
@@ -39,11 +40,8 @@ export class TasksComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.taskService
-      .getTasksNgrx()
-      .subscribe((tasks) => this.store.dispatch(retrievedTaskList({ tasks })));
-    
     this.store.select(selectTasks).subscribe(selected_tasks => this.tasks = selected_tasks);
+    this.store.dispatch(retrieveTaskList())
   }
 
   saveTask(taskReadOnly: Task): void {
@@ -78,42 +76,28 @@ export class TasksComponent implements OnInit {
   toggleReminder(task: Task): void {
     task = {...task}
     task.reminder = !task.reminder;
-    
+
     this.store.dispatch(updateTask(task));
     this.taskService.updateTask(task).subscribe();
   }
 
   drop(event: CdkDragDrop<ReadonlyArray<Task>>) {
     let data = [...event.container.data];
-    let previousData = [...event.container.data];
-    
-    if (event.previousContainer === event.container) {
-      moveItemInArray(
-        data,
-        event.previousIndex,
-        event.currentIndex
-      );
-    } else {
-      transferArrayItem(
-        previousData,
-        data,
-        event.previousIndex,
-        event.currentIndex
-      );
-      //if transfer, recalculate the order of previous (the list from drag)
-      event.previousContainer.data.forEach((x, index) => {
-        x.order = index;
-      });
-    }
-    //always, recalculate the order of the container (the list to drag)
+
+    data.sort(function(a,b) {return (a.order > b.order) ? 1 : ((b.order > a.order) ? -1 : 0);} );
+
+    moveItemInArray(
+      data,
+      event.previousIndex,
+      event.currentIndex
+    );
+
     data = data.map((readOnlyTask, index) => {
       let task = {...readOnlyTask};
       task.order = index;
       return task;
     });
 
-    this.taskService.updateAllTasks(data);
-
-    this.store.dispatch(retrievedTaskList({tasks: data}));
+    this.store.dispatch(updateTaskList({tasks:data}));
   }
 }
