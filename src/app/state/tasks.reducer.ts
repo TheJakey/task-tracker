@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import {addTask, deleteTask, retrieveTaskListSuccess, updateTask, updateTaskListSuccess} from './tasks.actions';
+import {addTask, deleteTask, retrieveTaskListSuccess, updateTask, updateTaskListError, updateTaskListSuccess} from './tasks.actions';
 import { Task } from '../Task';
 import { state } from '@angular/animations';
 
@@ -15,5 +15,6 @@ export const tasksReducer = createReducer(
     }),
     on(deleteTask, (state, task_to_delete) => state.filter(task => task.id !== task_to_delete.id)),
     on(updateTaskListSuccess, (state, { tasks }) => tasks),
+    on(updateTaskListError, (state) => [...state]),
     on(retrieveTaskListSuccess, (state, { tasks }) => tasks),
 )

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Task } from '../Task';
-import { delay, Observable, of, timer } from 'rxjs';
+import { delay, Observable, of, throwError, timer } from 'rxjs';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -40,16 +40,26 @@ export class TaskService {
   }
 
   updateAllTasks(tasks: Task[]): Observable<Task[]> {
-    // json-server used as BE currently doesn't support BULK update, so had to come up with a workaround
     const url = `${this.apiUrl}/`;
 
-    // Ugly "sleep" here which makes sure each itteration has 200ms between them otherwise json-server was failing
-    // https://stackoverflow.com/questions/3583724/how-do-i-add-a-delay-in-a-javascript-loop
+    // json-server used as BE currently doesn't support BULK update, so had to come up with a workaround
     for (const task of tasks) {
-      setTimeout(() => {
-        this.httpClient.put<Task>(url + task.id, task, httpOptions).subscribe();
-      }, task.order * 200);
+      var request = new XMLHttpRequest();
+
+      try {
+        request.open('PUT', url + task.id, false);  
+        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        request.send(JSON.stringify(task));
+
+        if (request.status != 200) {
+          return throwError(() => new Error("HTTP status: " + request.status))
+        }
+      }
+      catch(e: unknown) {
+        return throwError(() => e);
+      }
     }
+    
 
     return of(tasks);
   }

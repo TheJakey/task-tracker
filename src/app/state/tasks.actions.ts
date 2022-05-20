@@ -21,6 +21,10 @@ export const updateTaskListSuccess = createAction(
     props<{ tasks: Array<Task> }>()
 )
 
+export const updateTaskListError = createAction(
+    '[Task List/API] Update Tasks Error',
+)
+
 export const deleteTask = createAction(
     '[Task List] Delete Task',
     props<Task>()
@@ -33,4 +37,8 @@ export const retrieveTaskList = createAction(
 export const retrieveTaskListSuccess = createAction(
     '[Task List/API] Retrieve Tasks Success',
     props<{ tasks: ReadonlyArray<Task>}>()
+);
+
+export const retrieveTaskListError = createAction(
+    '[Task List/API] Retrieve Tasks Error',
 );

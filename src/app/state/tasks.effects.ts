@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import {TaskService} from "../services/task.service";
 import {catchError, EMPTY, map, mergeMap, Observable, of} from "rxjs";
-import {retrieveTaskList, retrieveTaskListSuccess, updateTaskList, updateTaskListSuccess} from "./tasks.actions";
+import {retrieveTaskList, retrieveTaskListSuccess, updateTaskList, updateTaskListSuccess, updateTaskListError, retrieveTaskListError} from "./tasks.actions";
 
 @Injectable()
 export class TasksEffects {
@@ -12,9 +12,12 @@ export class TasksEffects {
       mergeMap(() =>
         this.taskService.getTasks().pipe(
           map((tasks) => retrieveTaskListSuccess({ tasks })),
-          catchError(() => EMPTY) // TODO: Error handling https://ngrx.io/guide/effects
+          catchError((error) => {
+            console.log("Error loading Tasks", error);
+            return of(retrieveTaskListError());
+          }),
         )
-      )
+      ),
     )
   );
 
@@ -24,7 +27,10 @@ export class TasksEffects {
       mergeMap((tasks) => 
         this.taskService.updateAllTasks(tasks.tasks).pipe(
           map((tasks) => updateTaskListSuccess({tasks})),
-          catchError((error) => EMPTY)
+          catchError((error) => {
+            console.log(error);
+            return of(updateTaskListError());
+          })
         )
       )
     )

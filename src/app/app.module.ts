@@ -27,6 +27,8 @@ import { StoreModule } from '@ngrx/store';
 import { tasksReducer } from './state/tasks.reducer';
 import {EffectsModule} from "@ngrx/effects";
 import {TasksEffects} from "./state/tasks.effects";
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
 
 const appRoutes: Routes = [
   {path: '', component: TasksComponent},
@@ -61,8 +63,9 @@ const appRoutes: Routes = [
     MatInputModule,
     DragDropModule,
     StoreModule.forRoot({ tasks: tasksReducer }),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     EffectsModule.forRoot([TasksEffects]),
-    EffectsModule.forFeature([TasksEffects])
+    EffectsModule.forFeature([TasksEffects]),
   ],
   providers: [],
   bootstrap: [AppComponent]
