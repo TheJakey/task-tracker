@@ -1,0 +1,20 @@
+# compiled output
+/dist
+/tmp
+/out-tsc
+# dependencies
+/node_modules
+# IDEs and editors
+/.idea
+# IDE - VSCode
+.vscode/*
+# misc
+/.angular/cache
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings

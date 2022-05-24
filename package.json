@@ -1,5 +1,5 @@
 {
-  "name": "angular-crash",
+  "name": "task-tracker",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "server": "json-server --watch db.json --port 5000"
+    "server": "json-server --watch --host 0.0.0.0 db.json --port 5000"
   },
   "private": true,
   "dependencies": {
