@@ -6,25 +6,33 @@ https://github.com/bradtraversy/angular-crash-2021
 
 ## Usage
 
-### Install dependencies
+### Docker
+Get docker-compose.yaml from this project and run:
+
+```
+docker-compose -p TaskTracker up -d
+```
+
+### Local
+#### Install dependencies
 
 ```
 npm install
 ```
 
-### Run Angular server (http://localhost:4200)
+#### Run Angular server (http://localhost:4200)
 
 ```
 ng serve
 ```
 
-### Run the JSON server (http://localhost:5000)
+#### Run the JSON server (http://localhost:5000)
 
 ```
 npm run server
 ```
 
-### To build for production
+#### To build for production
 
 ```
 ng build
