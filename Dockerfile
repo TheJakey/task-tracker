@@ -14,4 +14,4 @@ RUN npm run ng build -- --prod
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY dist/task-tracker /usr/share/nginx/html
 
-CMD ./server.sh
+CMD ./docker-wrapper.sh
