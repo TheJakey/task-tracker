@@ -13,4 +13,4 @@ RUN npm run ng build -- --prod
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
-CMD ./docker-wrapper.sh
+ENTRYPOINT ["sh", "docker-wrapper.sh"]
