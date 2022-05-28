@@ -2,12 +2,5 @@ version: "3.6"
 services:
   frontend:
     image: thejakey/task-tracker:latest
-    command: ng serve --host 0.0.0.0
     ports:
-      - 4200:4200
-  
-  service:
-    image: thejakey/task-tracker:latest
-    command: npm run server
-    ports:
-      - 5000:5000
+      - 80:80
