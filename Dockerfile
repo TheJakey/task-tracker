@@ -1,6 +1,6 @@
 FROM nginx:alpine
 
-WORKDIR /usr/src/app
+WORKDIR /usr/src/app2
 
 COPY package.json package-lock.json ./
 RUN apk add nodejs-current npm
