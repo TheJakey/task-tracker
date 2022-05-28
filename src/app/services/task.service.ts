@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Task } from '../Task';
-import { delay, Observable, of, throwError, timer } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 const httpOptions = {
@@ -14,7 +14,7 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class TaskService {
-  private apiUrl = environment.serviceUrl;
+  private apiUrl = environment.serviceUrl + "/tasks";
 
   constructor(private httpClient: HttpClient) {}
 
@@ -24,7 +24,7 @@ export class TaskService {
 
   getTasksNgrx(): Observable<Array<Task>> {
     return this.httpClient.get<Array<Task>>(this.apiUrl);
-  } 
+  }
 
   addTask(task: Task): Observable<Task> {
     return this.httpClient.post<Task>(this.apiUrl, task, httpOptions);
@@ -45,10 +45,10 @@ export class TaskService {
 
     // json-server used as BE currently doesn't support BULK update, so had to come up with a workaround
     for (const task of tasks) {
-      var request = new XMLHttpRequest();
+      let request = new XMLHttpRequest();
 
       try {
-        request.open('PUT', url + task.id, false);  
+        request.open('PUT', url + task.id, false);
         request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         request.send(JSON.stringify(task));
 
@@ -60,7 +60,7 @@ export class TaskService {
         return throwError(() => e);
       }
     }
-    
+
 
     return of(tasks);
   }
