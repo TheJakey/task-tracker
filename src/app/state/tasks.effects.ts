@@ -71,7 +71,8 @@ export class TasksEffects {
       ofType(deleteTask),
       mergeMap((task) => 
         this.taskService.deleteTask(task).pipe(
-          map((task) => deleteTaskSuccess(task)),
+          // json-server doesn't return ID of deleted objects, so cannot remove it from state in a pretty manner
+          map(() => retrieveTaskList()),
           catchError((error) => {
             console.log("Error during task delete: ", error);
             return of(deleteTaskError());

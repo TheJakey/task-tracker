@@ -12,7 +12,9 @@ export const tasksReducer = createReducer(
 
         return [...stateWithoutOldTask, task];
     }),
-    on(deleteTaskSuccess, (state, taskToDelete) => state.filter(task => task.id !== taskToDelete.id)),
+    on(deleteTaskSuccess, (state, taskToDelete) => {
+        return state.filter(task => task.id !== taskToDelete.id)
+    }),
     on(updateTaskListSuccess, (state, { tasks }) => tasks),
     on(updateTaskListError, (state) => [...state]),
     on(retrieveTaskListSuccess, (state, { tasks }) => tasks),
