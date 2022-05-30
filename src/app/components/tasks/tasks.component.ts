@@ -4,13 +4,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Task } from 'src/app/Task';
-import { TaskService } from 'src/app/services/task.service';
 import { UiService } from 'src/app/services/ui.service';
 import { AddTaskComponent } from '../add-task/add-task.component';
 import {
   CdkDragDrop,
   moveItemInArray,
-  transferArrayItem,
 } from '@angular/cdk/drag-drop';
 import { Store } from '@ngrx/store';
 import {
@@ -34,7 +32,6 @@ export class TasksComponent implements OnInit {
   tasks: ReadonlyArray<Task> = [];
 
   constructor(
-    private taskService: TaskService,
     private uiService: UiService,
     private store: Store
   ) {}
@@ -49,15 +46,11 @@ export class TasksComponent implements OnInit {
 
     if (task.id != null) {
       this.store.dispatch(updateTask(task));
-
-      this.taskService.updateTask(task).subscribe();
     } else {
       let last_order: number = Math.max(...this.tasks.map((task) => task.order)) + 1;
       task.order = last_order !== undefined ? last_order : 0;
 
-      this.store.dispatch(addTask({ task }));
-
-      this.taskService.addTask(task).subscribe();
+      this.store.dispatch(addTask(task));
     }
   }
 
@@ -70,7 +63,6 @@ export class TasksComponent implements OnInit {
 
   deleteTask(task: Task): void {
     this.store.dispatch(deleteTask(task));
-    this.taskService.deleteTask(task).subscribe();
   }
 
   toggleReminder(task: Task): void {
@@ -78,7 +70,6 @@ export class TasksComponent implements OnInit {
     task.reminder = !task.reminder;
 
     this.store.dispatch(updateTask(task));
-    this.taskService.updateTask(task).subscribe();
   }
 
   drop(event: CdkDragDrop<ReadonlyArray<Task>>) {

@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Task } from 'src/app/Task';
 import { faTimes, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
-import { TaskService } from 'src/app/services/task.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PopUpComponent } from '../pop-up/pop-up.component';
 
@@ -19,7 +18,7 @@ export class TaskItemComponent implements OnInit {
   faTimes = faTimes
   faPenToSquare = faPenToSquare
   
-  constructor(private taskService:TaskService, private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog) { }
 
   ngOnInit(): void {
   }
