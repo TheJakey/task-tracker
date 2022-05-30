@@ -1,3 +1,5 @@
+[![Docker Frontend](https://github.com/TheJakey/task-tracker/actions/workflows/main.yml/badge.svg)](https://github.com/TheJakey/task-tracker/actions/workflows/main.yml)
+
 # Task Tracker
 Based on [YouTube Crash-course](https://www.youtube.com/watch?v=3dHNOWTI7H8)
 
