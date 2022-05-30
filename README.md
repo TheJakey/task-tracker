@@ -2,14 +2,20 @@
 
 # Task Tracker
 Based on [YouTube Crash-course](https://www.youtube.com/watch?v=3dHNOWTI7H8)
-
-Almost exact copy of:
-https://github.com/bradtraversy/angular-crash-2021
+[Git repo](https://github.com/bradtraversy/angular-crash-2021)
 
 ## Usage
 
 ### Docker
-Get docker-compose.yaml from this project and run:
+1. As is right now, you need to modify `serviceUrl` located in [environment.prod.ts](src\environments\environment.prod.ts) and replace ip with the one you will be using. 
+
+2. Than build image with 
+
+```
+docker build -t task-tracker:latest .
+```
+
+3. Last but not least, run image with docker-compose:
 
 ```
 docker-compose -p TaskTracker up -d
