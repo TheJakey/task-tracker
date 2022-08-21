@@ -9,7 +9,7 @@ RUN npm install -g json-server
 COPY . .
 
 RUN npm link @angular/cli
-RUN npm run ng build -- --prod
+RUN npm run ng build --configuration production --aot
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
